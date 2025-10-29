@@ -5,7 +5,6 @@ import helmet from "helmet";
 import logger from "./logger.js";
 import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
-import { stat } from "fs";
 
 dotenv.config();
 
@@ -78,14 +77,14 @@ app.get("/api/dev/:id", (req, res) => {
 });
 
 //Post Requests
-/*
-app.post("/api/addemployee", (req,res) => {
-  const user = req.body;
-  data.push(user);
-  console.log(`created new user`);
-  res.status(201).send(`user created`);
+
+app.post("/api/addemployee", async (req,res) => {
+  const { first_name, last_name } = req.body;
+  const employee = await addEmployee(first_name, last_name)
+  console.log(`Employee Added`);
+  res.status(201).send(`Success!`, employee);
 });
-*/
+
 //Port listen
 app.listen(PORT, () => {
   console.info(`Server is running on http://localhost:${PORT}`);

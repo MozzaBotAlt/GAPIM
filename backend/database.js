@@ -25,9 +25,3 @@ export async function addEmployee(first_name, last_name) {
     const id = result.insertId;
     return getEmployee(id);
 }
-
-const result = await addEmployee('John', 'Doe');
-console.log(result);
-
-const employee = await getEmployees(1);
-console.log(employee);
