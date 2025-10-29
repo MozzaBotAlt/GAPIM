@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
-import dev from "./dev.js";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import logger from "./logger.js";
+import dotenv from "dotenv";
+import database from "./databse.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -64,7 +67,7 @@ app.get("/api/date", (req, res) => {
 });
 
 app.get("/api/dev", (req, res) => {
-  res.json(dev);
+  res.json();
   logger.info(`Data endpoint accessed from IP: ${req.ip}`);
   console.log(`Data endpoint accessed from IP: ${req.ip}`);
 });

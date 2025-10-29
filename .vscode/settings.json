@@ -1,0 +1,37 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "lvm database (root)",
+            "database": "Employees",
+            "username": "root",
+            "askForPassword": true
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Enabled",
+                "ssl": {
+                    "ca": "C:\\Users\\User\\Downloads\\ca.pem"
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "lvm-database-labsim-von-mozzabot.l.aivencloud.com",
+            "port": 28045,
+            "driver": "MySQL",
+            "name": "lvm-database(aiven)",
+            "database": "defaultdb",
+            "username": "avnadmin",
+            "password": "AVNS_y5CyxBI8pJLmRVo8wol"
+        }
+    ]
+}
