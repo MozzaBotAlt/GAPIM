@@ -62,13 +62,13 @@ app.get("/api/date", (req, res) => {
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });
 
-app.get("/api/dev", (req, res) => {
+app.get("/api/dev", async (req, res) => {
   const dev = await getEmployees()
   res.send(dev);
   console.log(`Data endpoint accessed from IP: ${req.ip}`);
 });
 
-app.get("/api/dev/:id", (req, res) => {
+app.get("/api/dev/:id", async (req, res) => {
   console.log(req.params);
   const id = req.params.id;
   const employee = await getEmployee(id)
