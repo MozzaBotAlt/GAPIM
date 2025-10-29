@@ -10,17 +10,17 @@ const pool = createPool({
     database: process.env.DB_NAME
 }).promise();
 
-async function getEmployees() {
+export async function getEmployees() {
     const [response] = await pool.query("SELECT * FROM Employees;");
     return response;
 }
 
-async function getEmployee(id) {
+export async function getEmployee(id) {
     const [response] = await pool.queery('SELECT * FROM Employees WHERE id = ?;', [id]);
     return response;
 }
 
-async function addEmployee(first_name, last_name) {
+export async function addEmployee(first_name, last_name) {
     const result = await pool.query(`INSERT INTO Employees (first_name, last_name) VALUES (?, ?)`, [first_name, last_name])
     const id = result.insertId;
     return getEmployee(id);

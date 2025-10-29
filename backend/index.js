@@ -4,7 +4,8 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import logger from "./logger.js";
 import dotenv from "dotenv";
-import database from "./databse.js";
+import { getEmployees, getEmployee, addEmployee } from "./database.js";
+import { stat } from "fs";
 
 dotenv.config();
 
@@ -39,14 +40,12 @@ app.use(
 //Request Handlers
 app.use((request, response, next) => {
   console.log(`Client's IP: ${request.ip}`)
-  logger.info(`Client's IP: ${request.ip}`)
   next();
 })
 
 //Get Requests
 app.get("/ip", (request, response) => {
   response.status(201).send(request.ip);
-  logger.info(`IP endpoint accessed from IP: ${req.ip}`);
   console.log(`IP endpoint accessed from IP: ${req.ip}`);
 });
 
@@ -55,36 +54,32 @@ app.get('/', (req, res) => {
     statusCode: 200,
     body: JSON.stringify({ message: 'OK' })
   };
-  logger.info(`Root endpoint accessed from IP: ${req.ip}`);
   console.log(`Root endpoint accessed from IP: ${req.ip}`);
 });
 
 app.get("/api/date", (req, res) => {
   const currentDate = new Date();
   res.json({ date: currentDate });
-  logger.info(`Date endpoint accessed from IP: ${req.ip}`);
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });
 
 app.get("/api/dev", (req, res) => {
-  res.json();
-  logger.info(`Data endpoint accessed from IP: ${req.ip}`);
+  const dev = await getEmployees()
+  res.send(dev);
   console.log(`Data endpoint accessed from IP: ${req.ip}`);
 });
 
-app.get("/api/dev/:name", (req, res) => {
+app.get("/api/dev/:id", (req, res) => {
   console.log(req.params);
-  const { name } = req.params;
-  const user = dev.find((user) => user.name === name);
-    if (user) res.status(200).send(user);
-    else res.status(404).send(`Not Found`);
-  logger.info(`Dev endpoint accessed from IP: ${req.ip}`);
-  console.log(`Dev endpoint accessed from IP: ${req.ip}`);
+  const id = req.params.id;
+  const employee = await getEmployee(id)
+  res.send(employee)
+  console.log(`Dev Request endpoint accessed from IP: ${req.ip}`);
 });
 
 //Post Requests
 /*
-app.post("/", (req,res) => {
+app.post("/api/addemployee", (req,res) => {
   const user = req.body;
   data.push(user);
   console.log(`created new user`);
@@ -93,7 +88,11 @@ app.post("/", (req,res) => {
 */
 //Port listen
 app.listen(PORT, () => {
-  logger.info(`Server is running on http://localhost:${PORT}`);
+  console.info(`Server is running on http://localhost:${PORT}`);
 });
 
 //extra codes
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Internal Server Error')
+})
