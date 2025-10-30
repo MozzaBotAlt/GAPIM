@@ -6,10 +6,10 @@ import logger from "./logger.js";
 import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
-dotenv.config();
+require('dotenv').config({ silent: true });
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8080;
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -87,7 +87,7 @@ app.post("/api/addemployee", async (req,res) => {
 
 //Port listen
 app.listen(PORT, () => {
-  console.info(`Server is running on http://localhost:${PORT}`);
+  console.info(`Server is running on https://lvm-backend-j0ws.onrender.com/`);
 });
 
 //extra codes
