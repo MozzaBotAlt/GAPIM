@@ -2,9 +2,8 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import 'dotenv/config';
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
-
-require('dotenv').config({ silent: true });
 
 const app = express();
 const PORT = process.env.PORT || 8080;
