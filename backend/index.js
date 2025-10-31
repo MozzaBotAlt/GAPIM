@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import logger from "./logger.js";
-import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 require('dotenv').config({ silent: true });
