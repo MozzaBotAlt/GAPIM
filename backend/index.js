@@ -22,8 +22,6 @@ app.disable("x-powered-by"); //Disabling fingerprinting
 app.use(limiter); //Apply rate limiter to all requests
 app.use(helmet()); //Apply helmet
 app.use(express.json()); //Parse JSON bodies
-logger.info("Logger initialized");
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //CORS settings
