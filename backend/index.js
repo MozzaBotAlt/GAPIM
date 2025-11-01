@@ -102,7 +102,3 @@ app.listen(PORT, () => {
 app.use((err, req, res, next) => {
   res.redirect(baseurl);
 });
-
-app.use((req, res) => {
-  res.redirect(baseurl);
-});
