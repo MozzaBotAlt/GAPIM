@@ -100,11 +100,9 @@ app.listen(PORT, () => {
 
 //Database error handling
 app.use((err, req, res, next) => {
-  console.error("Server Error:", err.stack);
   res.redirect(baseurl);
 });
 
 app.use((req, res) => {
-  console.warn(`404: ${req.originalUrl}`);
   res.redirect(baseurl);
 });
