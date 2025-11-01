@@ -98,7 +98,15 @@ app.listen(PORT, () => {
 //extra codes
 
 //Database error handling
+
+app.use((req, res) => {
+  console.warn(`404 Not Found: ${req.originalUrl}`);
+  res.status(404).redirect(`${baseurl}`);
+});
+
+// 5. Error Handler
 app.use((err, req, res, next) => {
-  console.log(err);
-  if (!res.headersSent) res.redirect(baseurl);
+  console.error('Unhandled error:', err);
+  if (res.headersSent) return next(err);
+  res.status(500).redirect(`${baseurl}`);
 });
