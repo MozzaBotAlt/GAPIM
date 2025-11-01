@@ -11,19 +11,31 @@ const pool = mysql.createPool({
 }).promise();
 
 export async function getEmployees() {
-    const [response] = await pool.query("SELECT * FROM Employees;");
-    return response;
+    try {
+        const [response] = await pool.query("SELECT * FROM Employees;");
+        return response;
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 export async function getEmployee(id) {
-    const [response] = await pool.queery('SELECT * FROM Employees WHERE id = ?;', [id]);
-    return response;
+    try {
+        const [response] = await pool.queery('SELECT * FROM Employees WHERE id = ?;', [id]);
+        return response;
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 export async function addEmployee(first_name, last_name) {
-    const result = await pool.query(`INSERT INTO Employees (first_name, last_name) VALUES (?, ?)`, [first_name, last_name])
-    const id = result.insertId;
-    return getEmployee(id);
+    try {
+        const result = await pool.query(`INSERT INTO Employees (first_name, last_name) VALUES (?, ?)`, [first_name, last_name])
+        const id = result.insertId;
+        return getEmployee(id);
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 const employees = getEmployees()

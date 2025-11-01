@@ -3,7 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import 'dotenv/config';
-//import { getEmployees, getEmployee, addEmployee } from "./database.js";
+import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -32,28 +32,37 @@ app.use(
 );
 
 //Request Handlers
-app.use((request, response, next) => {
-  console.log(`Client's IP: ${request.ip}`)
+app.use((req, res, next) => {
+  console.log(`Client's IP: ${req.ip}`)
+  res.send(`Your IP: ${req.ip}`)
   next();
 })
 
 //Get Requests
 app.get("/ip", (request, response) => {
   response.status(201).send(request.ip);
-  console.log(`IP endpoint accessed from IP: ${req.ip}`);
+  console.log(`IP endpoint accessed from IP: ${request.ip}`);
 });
 
 app.get('/', (req, res) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'OK' })
-  };
-  console.log(`Root endpoint accessed from IP: ${req.ip}`);
+  res.status(200).send(`Server OK`)
+  console.log(`Root endpoint accessed from IP: ${req.ip}`)
 });
 
-app.get("/api/date", (req, res) => {
+/*app.get("/api/date", (req, res) => {
   const currentDate = new Date();
   res.json({ date: currentDate });
+  console.log(`Date endpoint accessed from IP: ${req.ip}`);
+});*/
+
+app.get("/date", async (req, res) => {
+  try {
+    const currentDate = await new Date();
+    res.json({ date: currentDate });
+    console.log(currentDate);
+  } catch (error) {
+    console.log(`Error:`, error);
+  };
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });
 
@@ -86,7 +95,16 @@ app.listen(PORT, () => {
 });
 
 //extra codes
-/*app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send('Internal Server Error')
-})*/
+
+//Database error handling
+const baseurl = 'https://lvm-backend-j0ws.onrender.com';
+
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err.stack);
+  res.redirect(baseurl);
+});
+
+app.use((req, res) => {
+  console.warn(`404: ${req.originalUrl}`);
+  res.redirect(baseurl);
+});
