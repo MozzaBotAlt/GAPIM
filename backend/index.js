@@ -3,7 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import 'dotenv/config';
-//import { getEmployees, getEmployee, addEmployee } from "./database.js";
+import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 //Constants
 const app = express();
@@ -50,12 +50,6 @@ app.get('/', (req, res) => {
   console.log(`Root endpoint accessed from IP: ${req.ip}`)
 });
 
-/*app.get("/api/date", (req, res) => {
-  const currentDate = new Date();
-  res.json({ date: currentDate });
-  console.log(`Date endpoint accessed from IP: ${req.ip}`);
-});*/
-
 app.get("/api/date", async (req, res) => {
   try {
     const currentDate = new Date();
@@ -67,7 +61,7 @@ app.get("/api/date", async (req, res) => {
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });
 
-/*app.get("/api/dev", async (req, res) => {
+app.get("/api/dev", async (req, res) => {
   const dev = await getEmployees()
   res.send(dev);
   console.log(`Data endpoint accessed from IP: ${req.ip}`);
@@ -89,22 +83,18 @@ app.post("/api/addemployee", async (req,res) => {
   console.log(`Employee Added`);
   res.status(201).send(`Success!`, employee);
 });
-*/
+
 //Port listen
 app.listen(PORT, () => {
   console.info(`Server is running on ${baseurl}`);
 });
 
-//extra codes
-
 // error handling
-
 app.use((req, res) => {
   console.warn(`404 Not Found: ${req.originalUrl}`);
   res.status(404).redirect(`${baseurl}`);
 });
 
-// 5. Error Handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   if (res.headersSent) return next(err);
@@ -112,11 +102,10 @@ app.use((err, req, res, next) => {
 });
 
 //Similar endpoint redirect
-
 app.get('date', (req,res) => {
   res.redirect(`${basuerl}/api/date`)
 });
 
 app.get('dev', (req,res) => {
   res.redirect(`${basuerl}/api/dev`)
-})
+});
