@@ -36,7 +36,6 @@ app.use(
 //Request Handlers
 app.use((req, res, next) => {
   console.log(`Client's IP: ${req.ip}`)
-  res.send(`Your IP: ${req.ip}`)
   next();
 })
 
@@ -59,7 +58,7 @@ app.get('/', (req, res) => {
 
 app.get("/api/date", async (req, res) => {
   try {
-    const currentDate = await new Date();
+    const currentDate = new Date();
     res.json({ date: currentDate });
     console.log(currentDate);
   } catch (error) {
@@ -101,6 +100,5 @@ app.listen(PORT, () => {
 //Database error handling
 app.use((err, req, res, next) => {
   console.log(err);
-  res.redirect(baseurl);
-  next();
+  if (!res.headersSent) res.redirect(baseurl);
 });
