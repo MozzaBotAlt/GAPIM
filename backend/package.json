@@ -8,6 +8,9 @@
     "start": "node index.js",
     "experiment": "node ./experiment/exp_1.js"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "GPL-3.0-only",
@@ -20,8 +23,5 @@
     "dotenv": "^16.3.1",
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^4.7.1"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   }
 }

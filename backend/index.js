@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });*/
 
-app.get("/date", async (req, res) => {
+app.get("/api/date", async (req, res) => {
   try {
     const currentDate = await new Date();
     res.json({ date: currentDate });
