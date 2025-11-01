@@ -97,7 +97,7 @@ app.listen(PORT, () => {
 
 //extra codes
 
-//Database error handling
+// error handling
 
 app.use((req, res) => {
   console.warn(`404 Not Found: ${req.originalUrl}`);
@@ -110,3 +110,13 @@ app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
   res.status(500).redirect(`${baseurl}`);
 });
+
+//Similar endpoint redirect
+
+app.get('date', (req,res) => {
+  res.redirect(`${basuerl}/api/date`)
+});
+
+app.get('dev', (req,res) => {
+  res.redirect(`${basuerl}/api/dev`)
+})
