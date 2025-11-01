@@ -3,7 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import 'dotenv/config';
-import { getEmployees, getEmployee, addEmployee } from "./database.js";
+//import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -57,7 +57,7 @@ app.get("/api/date", (req, res) => {
   console.log(`Date endpoint accessed from IP: ${req.ip}`);
 });
 
-app.get("/api/dev", async (req, res) => {
+/*app.get("/api/dev", async (req, res) => {
   const dev = await getEmployees()
   res.send(dev);
   console.log(`Data endpoint accessed from IP: ${req.ip}`);
@@ -79,7 +79,7 @@ app.post("/api/addemployee", async (req,res) => {
   console.log(`Employee Added`);
   res.status(201).send(`Success!`, employee);
 });
-
+*/
 //Port listen
 app.listen(PORT, () => {
   console.info(`Server is running on https://lvm-backend-j0ws.onrender.com/`);
