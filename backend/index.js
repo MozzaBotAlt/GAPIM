@@ -3,7 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import 'dotenv/config';
-import { getEmployees, getEmployee, addEmployee } from "./database.js";
+//import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 //Constants
 const app = express();
