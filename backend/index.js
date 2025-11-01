@@ -5,8 +5,10 @@ import helmet from "helmet";
 import 'dotenv/config';
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
+//Constants
 const app = express();
 const PORT = process.env.PORT || 8080;
+const baseurl = process.env.APP_URL;
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -91,14 +93,12 @@ app.post("/api/addemployee", async (req,res) => {
 */
 //Port listen
 app.listen(PORT, () => {
-  console.info(`Server is running on https://lvm-backend-j0ws.onrender.com/`);
+  console.info(`Server is running on ${baseurl}`);
 });
 
 //extra codes
 
 //Database error handling
-const baseurl = 'https://lvm-backend-j0ws.onrender.com';
-
 app.use((err, req, res, next) => {
   console.error("Server Error:", err.stack);
   res.redirect(baseurl);
