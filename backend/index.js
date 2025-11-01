@@ -100,5 +100,7 @@ app.listen(PORT, () => {
 
 //Database error handling
 app.use((err, req, res, next) => {
+  console.log(err);
   res.redirect(baseurl);
+  next();
 });
