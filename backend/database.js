@@ -3,17 +3,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const ca = Buffer.from(process.env.DB_SSL_CA_BASE64, "base64").toString("utf-8");
-
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     waitForConnections: true,
-    connectionLimit: 100,
     queueLimit: 0,
-    ssl: { ca }
+    ssl: { ca: Buffer.from(process.env.DB_SSL_CA, "base64").toString("utf-8"), },
+    connectionLimit: 10,
 }).promise();
 
 export async function getEmployees() {
