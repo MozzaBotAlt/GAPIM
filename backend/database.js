@@ -1,8 +1,9 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
-import fs from "fs";
 
 dotenv.config();
+
+const ca = Buffer.from(process.env.DB_SSL_CA_BASE64, "base64").toString("utf-8");
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -12,7 +13,7 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 100,
     queueLimit: 0,
-    ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA_PATH) }
+    ssl: { ca }
 }).promise();
 
 export async function getEmployees() {
