@@ -10,7 +10,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 100,
-    queueLimit: 0
+    queueLimit: 0,
+    ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA_PATH) }
 }).promise();
 
 export async function getEmployees() {
