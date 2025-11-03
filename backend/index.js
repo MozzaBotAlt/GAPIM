@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import 'dotenv/config';
+import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 //Constants
@@ -25,6 +25,7 @@ app.use(limiter); //Apply rate limiter to all requests
 app.use(helmet()); //Apply helmet
 app.use(express.json()); //Parse JSON bodies
 app.use(express.urlencoded({ extended: false }));
+dotenv.config({ path: '/etc/secrets/.env' });
 
 //CORS settings
 app.use(

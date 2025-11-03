@@ -2,7 +2,7 @@ import mysql from 'mysql2';
 import dotenv from 'dotenv';
 import fs from 'fs';
 
-dotenv.config();
+dotenv.config({ path: '/etc/secrets/.env' });
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -11,8 +11,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
     waitForConnections: true,
     queueLimit: 0,
-    ssl: { ca: fs.readFileSync(new URL(process.env.DB_SSL_CA_PATH, import.meta.url), 'utf8'), },
-    connectionLimit: 10,
+    ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA_PATH, "utf8"), },
+    connectionLimit: 10
 }).promise();
 
 export async function getEmployees() {
