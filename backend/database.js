@@ -43,10 +43,4 @@ export async function addEmployee(first_name, last_name) {
     }
 }
 
-const employees = getEmployees()
-console.log(employees)
-
-const employee = getEmployees(1)
-console.log(`The main web dev:` + employee)
-
 export default pool;
