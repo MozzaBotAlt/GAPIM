@@ -85,13 +85,7 @@ app.post("/api/addemployee", async (req,res) => {
   res.status(201).send(`Success!`, employee);
 });
 
-app.post("/api/github", async (req,res) => {
-  const data = req.body;
-  console.log(`Github push`, data)
-  res.status(201).send(`Affirmative`, data)
-})
-
-app.post('/', express.json({type: 'application/json'}), (request, response) => {
+app.post('/github/webhooks/', express.json({type: 'application/json'}), (request, response) => {
   response.status(202).send('Accepted');
   const githubEvent = request.headers['x-github-event'];
 
