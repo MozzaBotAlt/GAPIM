@@ -113,7 +113,7 @@ app.listen(PORT, () => {
 });
 
 // error handling
-/*app.use((req, res) => {
+app.use((req, res) => {
   console.warn(`404 Not Found: ${req.originalUrl}`);
   res.status(404).redirect(`${baseurl}`);
 });
@@ -131,4 +131,4 @@ app.get('/date', (req,res) => {
 
 app.get('/dev', (req,res) => {
   res.redirect(`${basuerl}/api/dev`)
-});*/
+});
