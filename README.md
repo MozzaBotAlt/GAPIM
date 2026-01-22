@@ -1,7 +1,9 @@
 <h1 align="center">General API of MozzaBot Websites</h1>
+<h3 align="center">GAPIM</h3>
+
 
 <div align="center">
-  <strong>Backend API of LVM</strong>
+  <strong>Backend API of All MozzaBot Sites</strong>
 </div>
 
 
@@ -22,11 +24,6 @@ Tell us on:
 Credits:
 1. Ali Mozzabot I... Team Principal...            Website Developer...      [Github](https://github.com/RaspberryPiNArduinoUser)
 2. Eiko...             Right Hand Man(RHM)...     Graphic Designer...       [Github](https://github.com/zhafryanir)
-3. Whiteshard...       Sub Director...            Game Engine Developer...  [Scratch](https://scratch.mit.edu/users/extwoiskindasus/)
-
-## Achnowledgements:
-1. Ahmad Ammar Bin Zainuddin...                      Advisor
-2. People of Maktab Rendah Sains Mara Langkawi...    Supporter
 
 ## Notes
 
