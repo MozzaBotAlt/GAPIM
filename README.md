@@ -1,4 +1,4 @@
-<h1 align="center">Backend of Labsim Von MozzaBot</h1>
+<h1 align="center">General API of MozzaBot Websites</h1>
 
 <div align="center">
   <strong>Backend API of LVM</strong>
