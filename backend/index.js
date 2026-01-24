@@ -7,8 +7,12 @@ import { getEmployees, getEmployee, addEmployee } from "./database.js";
 
 //Constants
 const app = express();
+const router = express.Router();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
+
+//Route
+const RUser = require('./routes/client');
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -76,6 +80,8 @@ app.get("/api/dev/:id", async (req, res) => {
   console.log(`Dev Request endpoint accessed from IP: ${req.ip}`);
 });
 
+app.get("/api/")
+
 //Post Requests
 
 app.post("/api/addemployee", async (req,res) => {
@@ -106,6 +112,9 @@ app.post('/github/webhooks/', express.json({type: 'application/json'}), (request
   }
 });
 
+
+//Router
+app.get('/api/users', RUser);
 
 //Port listen
 app.listen(PORT, () => {
