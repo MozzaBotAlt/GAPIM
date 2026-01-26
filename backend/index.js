@@ -115,6 +115,7 @@ app.post('/github/webhooks/', express.json({type: 'application/json'}), (request
 
 //Router
 app.get('/api/users', RUser);
+app.get('/api/date', RUser);
 
 //Port listen
 app.listen(PORT, () => {
