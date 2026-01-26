@@ -14,6 +14,23 @@ Use of this is for educational purposes only
 URL to API is as listed below:
 - [Render](https://lvm-backend-j0ws.onrender.com)
 
+## API Endpoints
+
+### General Endpoints
+- `GET /` - Server status check
+- `GET /ip` - Returns client's IP address
+- `GET /date` - Redirects to `/api/date`
+- `GET /dev` - Redirects to `/api/dev`
+
+### API Routes (`/api`)
+- `GET /api/date` - Returns current date
+- `GET /api/dev` - Returns all employees
+- `GET /api/dev/:id` - Returns specific employee by ID
+- `POST /api/addemployee` - Add new employee (requires `first_name` and `last_name` in body)
+
+### Webhooks
+- `POST /github/webhooks/` - GitHub webhook handler for issues and ping events
+
 ## Bugs?
 Bugs? Any ideas for improvements? Feedback?
 Tell us on:
