@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
 
 //Route
-const RUser = require('./routes/client');
+import RUser from "./routes/RUser.js";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
