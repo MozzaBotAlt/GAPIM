@@ -3,16 +3,12 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import { getEmployees, getEmployee, addEmployee } from "./database.js";
+import apiRouter from "./routes/api.js";
 
 //Constants
 const app = express();
-const router = express.Router();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
-
-//Route
-import RUser from "./routes/RUser.js";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -55,41 +51,8 @@ app.get('/', (req, res) => {
   console.log(`Root endpoint accessed from IP: ${req.ip}`)
 });
 
-app.get("/api/date", async (req, res) => {
-  try {
-    const currentDate = new Date();
-    res.json({ date: currentDate });
-    console.log(currentDate);
-  } catch (error) {
-    console.log(`Error:`, error);
-  };
-  console.log(`Date endpoint accessed from IP: ${req.ip}`);
-});
-
-app.get("/api/dev", async (req, res) => {
-  const dev = await getEmployees()
-  res.send(dev);
-  console.log(`Data endpoint accessed from IP: ${req.ip}`);
-});
-
-app.get("/api/dev/:id", async (req, res) => {
-  console.log(req.params);
-  const id = req.params.id;
-  const employee = await getEmployee(id)
-  res.send(employee)
-  console.log(`Dev Request endpoint accessed from IP: ${req.ip}`);
-});
-
-app.get("/api/")
-
-//Post Requests
-
-app.post("/api/addemployee", async (req,res) => {
-  const { first_name, last_name } = req.body;
-  const employee = await addEmployee(first_name, last_name)
-  console.log(`Employee Added`);
-  res.status(201).send(`Success!`, employee);
-});
+// Use API router
+app.use('/api', apiRouter);
 
 app.post('/github/webhooks/', express.json({type: 'application/json'}), (request, response) => {
   response.status(202).send('Accepted');
@@ -112,11 +75,6 @@ app.post('/github/webhooks/', express.json({type: 'application/json'}), (request
   }
 });
 
-
-//Router
-app.get('/api/users', RUser);
-app.get('/api/date', RUser);
-
 //Port listen
 app.listen(PORT, () => {
   console.info(`Server is running on ${baseurl}`);
@@ -136,9 +94,9 @@ app.use((err, req, res, next) => {
 
 //Similar endpoint redirect
 app.get('/date', (req,res) => {
-  res.redirect(`${basuerl}/api/date`)
+  res.redirect(`${baseurl}/api/date`)
 });
 
 app.get('/dev', (req,res) => {
-  res.redirect(`${basuerl}/api/dev`)
+  res.redirect(`${baseurl}/api/dev`)
 });
