@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
+import dotenv from "dotenv";
+import { getEmployees, getEmployee, addEmployee } from "./database.js";
+
+//Constants
+const app = express();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
 
@@ -11,6 +17,7 @@ const limiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
 
 import helmet from "helmet";
 import dotenv from "dotenv";
