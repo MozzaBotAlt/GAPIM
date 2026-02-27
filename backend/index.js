@@ -1,19 +1,19 @@
 import express from "express";
 import cors from "cors";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
-import dotenv from "dotenv";
-import apiRouter from "./routes/api.js";
-
-//Constants
-const app = express();
+import rateLimit from "express-rate-
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after a minute",
+  message: "Too many requests from this limit";
+import helmet from "helmet";
+import dotenv from "dotenv";
+import apiRouter from "./routes/api.js";
+
+//Constants
+const app = express();IP, please try again after a minute",
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
