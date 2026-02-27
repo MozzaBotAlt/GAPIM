@@ -7,7 +7,11 @@ const baseurl = process.env.APP_URL;
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this limit";
+  message: "Too many requests from this IP, please try again after a minute",
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
 import helmet from "helmet";
 import dotenv from "dotenv";
 import apiRouter from "./routes/api.js";
@@ -16,7 +20,7 @@ import apiRouter from "./routes/api.js";
 const app = express();IP, please try again after a minute",
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+
 
 //App settings
 app.set("trust proxy", 20 /* number of proxies between user and server */);
