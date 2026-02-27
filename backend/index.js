@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
+import apiRouter from "./routes/api.js";
 
 //Constants
 const app = express();
@@ -17,17 +18,6 @@ const limiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
-
-
-import helmet from "helmet";
-import dotenv from "dotenv";
-import apiRouter from "./routes/api.js";
-
-//Constants
-const app = express();IP, please try again after a minute",
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-
 
 //App settings
 app.set("trust proxy", 20 /* number of proxies between user and server */);
