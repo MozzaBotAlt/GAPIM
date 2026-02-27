@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import rateLimit from "express-rate-
+import rateLimit from "express-rate-limit";
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
 
