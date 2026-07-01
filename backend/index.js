@@ -5,6 +5,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import { getEmployees, getEmployee, addEmployee } from "./database.js";
 import apiRouter from "./routes/api.js";
+import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
 
 //Constants
 const app = express();
@@ -52,8 +53,14 @@ app.get('/', (req, res) => {
   console.log(`Root endpoint accessed from IP: ${req.ip}`)
 });
 
+app.get('/infositemrsm', (req, res) => {
+  res.status(200).send(`Infositemrsm endpoint OK`)
+  console.log(`Infositemrsm endpoint accessed from IP: ${req.ip}`)
+});
+
 // Use API router
 app.use('/api', apiRouter);
+registerInfositemrsmRoutes(app);
 
 app.post('/github/webhooks/', express.json({type: 'application/json'}), (request, response) => {
   response.status(202).send('Accepted');
