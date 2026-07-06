@@ -1,17 +1,16 @@
 {
-  "slides": [],
-  "announcements": [],
+  "slides": [
+    {
+      "title": "Test slide",
+      "message": "Hello"
+    }
+  ],
+  "announcements": [
+    {
+      "title": "Test announcement"
+    }
+  ],
   "settings": {
-    "accentColor": "#6cc3ff",
-    "accentSoftColor": "#2f7fd3",
-    "backgroundColor": "#020814",
-    "surfaceColor": "#071222",
-    "textColor": "#eff7ff",
-    "mutedColor": "#9bb3cc",
-    "slideTitleSize": "2.5",
-    "slideMessageSize": "1.15",
-    "overlayOpacity": "0.82",
-    "tickerDuration": "20",
-    "announcementCount": "6"
+    "accentColor": "#123456"
   }
 }

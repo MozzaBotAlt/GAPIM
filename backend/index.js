@@ -3,7 +3,6 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import { getEmployees, getEmployee, addEmployee } from "./database.js";
 import apiRouter from "./routes/api.js";
 import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
 
@@ -51,11 +50,6 @@ app.get("/ip", (request, response) => {
 app.get('/', (req, res) => {
   res.status(200).send(`Server OK`)
   console.log(`Root endpoint accessed from IP: ${req.ip}`)
-});
-
-app.get('/infositemrsm', (req, res) => {
-  res.status(200).send(`Infositemrsm endpoint OK`)
-  console.log(`Infositemrsm endpoint accessed from IP: ${req.ip}`)
 });
 
 // Use API router

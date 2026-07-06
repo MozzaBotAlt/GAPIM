@@ -30,36 +30,31 @@ router.get("/infositemrsm", (req, res) => {
   res.json(data);
 });
 
-router.put("/infositemrsm", (req, res) => {
-  const { slides, announcements } = req.body;
-  if (!Array.isArray(slides)) {
-    return res.status(400).json({ message: "Invalid slides format" });
+router.post("/infositemrsm", (req, res) => {
+  if (req.body === undefined) {
+    return res.status(400).json({ message: "No data provided" });
   }
 
-  const data = {
-    slides: slides.map((slide) => ({
-      title: slide.title || "",
-      message: slide.message || "",
-      imageUrl: slide.imageUrl || "",
-      videoUrl: slide.videoUrl || "",
-      duration: Number(slide.duration) || 12,
-      caption: slide.caption || "",
-    })),
-    announcements: Array.isArray(announcements) ? announcements : [],
-    settings:
-      req.body.settings && typeof req.body.settings === "object"
-        ? req.body.settings
-        : {},
-  };
+  const payload = req.body;
+  writeBackendData(payload);
 
-  writeBackendData(data);
-  res.json({ success: true, data });
+  res.status(201).json({ success: true, message: "Data saved", data: payload });
+});
+
+router.put("/infositemrsm", (req, res) => {
+  if (req.body === undefined) {
+    return res.status(400).json({ message: "No data provided" });
+  }
+
+  const payload = req.body;
+  writeBackendData(payload);
+
+  res.json({ success: true, data: payload });
 });
 
 export function registerInfositemrsmRoutes(app) {
-  app.use("/infositemrsm", router);
-  app.use("api/infositemrsm", router);
   app.use("/", router);
+  app.use("/api", router);
 }
 
 export { readBackendData, writeBackendData, router };
