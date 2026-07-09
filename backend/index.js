@@ -4,7 +4,11 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import apiRouter from "./routes/api.js";
+import chatbotRouter from "./chatbot/index.js";
 import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
+import { initializeDatabase, saveIncomingRequest } from "./database.js";
+
+dotenv.config({ path: "/etc/secrets/.env" });
 
 //Constants
 const app = express();
@@ -26,7 +30,6 @@ app.use(limiter); //Apply rate limiter to all requests
 app.use(helmet()); //Apply helmet
 app.use(express.json()); //Parse JSON bodies
 app.use(express.urlencoded({ extended: false }));
-dotenv.config({ path: '/etc/secrets/.env' });
 
 //CORS settings
 app.use(
@@ -37,9 +40,18 @@ app.use(
 
 //Request Handlers
 app.use((req, res, next) => {
-  console.log(`Client's IP: ${req.ip}`)
+  console.log(`Client's IP: ${req.ip}`);
   next();
-})
+});
+
+app.use((req, res, next) => {
+  if (req.method === "PUT") {
+    void saveIncomingRequest(req).catch((error) => {
+      console.warn("Could not persist PUT request payload:", error.message);
+    });
+  }
+  next();
+});
 
 //Get Requests
 app.get("/ip", (request, response) => {
@@ -47,58 +59,69 @@ app.get("/ip", (request, response) => {
   console.log(`IP endpoint accessed from IP: ${request.ip}`);
 });
 
-app.get('/', (req, res) => {
-  res.status(200).send(`Server OK`)
-  console.log(`Root endpoint accessed from IP: ${req.ip}`)
+app.get("/", (req, res) => {
+  res.status(200).send("Server OK");
+  console.log(`Root endpoint accessed from IP: ${req.ip}`);
 });
 
 // Use API router
-app.use('/api', apiRouter);
+app.use("/api", apiRouter);
+app.use("/chatbot", chatbotRouter);
 registerInfositemrsmRoutes(app);
 
-app.post('/github/webhooks/', express.json({type: 'application/json'}), (request, response) => {
-  response.status(202).send('Accepted');
-  const githubEvent = request.headers['x-github-event'];
+app.post("/github/webhooks/", express.json({ type: "application/json" }), (request, response) => {
+  response.status(202).send("Accepted");
+  const githubEvent = request.headers["x-github-event"];
 
-  if (githubEvent === 'issues') {
+  if (githubEvent === "issues") {
     const data = request.body;
     const action = data.action;
-    if (action === 'opened') {
+    if (action === "opened") {
       console.log(`An issue was opened with this title: ${data.issue.title}`);
-    } else if (action === 'closed') {
+    } else if (action === "closed") {
       console.log(`An issue was closed by ${data.issue.user.login}`);
     } else {
       console.log(`Unhandled action for the issue event: ${action}`);
     }
-  } else if (githubEvent === 'ping') {
-    console.log('GitHub sent the ping event');
+  } else if (githubEvent === "ping") {
+    console.log("GitHub sent the ping event");
   } else {
     console.log(`Unhandled event: ${githubEvent}`);
   }
 });
 
+initializeDatabase()
+  .then((ready) => {
+    if (ready) {
+      console.info("Database tables are ready.");
+    }
+  })
+  .catch((error) => {
+    console.warn("Database initialization failed:", error.message);
+  });
+
 //Port listen
 app.listen(PORT, () => {
-  console.info(`Server is running on ${baseurl}`);
+  console.info(`Server is running on ${baseurl || `http://localhost:${PORT}`}`);
 });
 
 // error handling
 app.use((req, res) => {
   console.warn(`404 Not Found: ${req.originalUrl}`);
-  res.status(404).redirect(`${baseurl}`);
+  res.status(404).redirect(`${baseurl || `http://localhost:${PORT}`}`);
 });
 
 app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
+  console.error("Unhandled error:", err);
   if (res.headersSent) return next(err);
-  res.status(500).redirect(`${baseurl}`);
+  res.status(500).redirect(`${baseurl || `http://localhost:${PORT}`}`);
 });
 
 //Similar endpoint redirect
-app.get('/date', (req,res) => {
-  res.redirect(`${baseurl}/api/date`)
+app.get("/date", (req, res) => {
+  res.redirect(`${baseurl || `http://localhost:${PORT}`}/api/date`);
 });
 
-app.get('/dev', (req,res) => {
-  res.redirect(`${baseurl}/api/dev`)
+app.get("/dev", (req, res) => {
+  res.redirect(`${baseurl || `http://localhost:${PORT}`}/api/dev`);
 });

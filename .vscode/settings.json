@@ -33,5 +33,6 @@
             "username": "avnadmin",
             "password": "AVNS_y5CyxBI8pJLmRVo8wol"
         }
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }

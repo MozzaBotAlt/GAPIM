@@ -3,3 +3,5 @@
 # Environment Variables
 .env
 ca.pem
+/backend/process.env
+/backend/secret.env
