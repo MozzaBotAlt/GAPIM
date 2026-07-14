@@ -1,3 +1,5 @@
+import express from "express";
+import postgres from "postgres";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 

@@ -1,2 +1,8 @@
-# Install with: pip install -r requirements.txt
-# This file is provided for the other machine to install the Python-side requirements if needed.
+postgres
+express
+dotenv
+cors
+express-rate-limit
+helmet
+path
+fs

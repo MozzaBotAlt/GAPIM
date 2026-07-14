@@ -11,6 +11,7 @@ import { initializeDatabase, saveIncomingRequest } from "./database.js";
 dotenv.config({ path: "/etc/secrets/.env" });
 
 //Constants
+const paywall = require("./paywall/index.js");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
@@ -39,6 +40,8 @@ app.use(
 );
 
 //Request Handlers
+app.use("/api", paywall);
+
 app.use((req, res, next) => {
   console.log(`Client's IP: ${req.ip}`);
   next();
