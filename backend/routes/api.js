@@ -1,5 +1,4 @@
 import express from "express";
-import { getEmployees, getEmployee, addEmployee } from "../database.js";
 
 const router = express.Router();
 

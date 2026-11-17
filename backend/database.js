@@ -166,7 +166,7 @@ export async function saveIncomingRequest(req) {
 
   return result.rows[0];
 }*/
-
+/*
 export async function saveChatMessage({ message, userId, metadata, response, source = "http" }) {
   const db = getPool();
   if (!db) {
@@ -181,7 +181,7 @@ export async function saveChatMessage({ message, userId, metadata, response, sou
     `,
     [userId || null, message || "", response || null, sanitizeJson(metadata || {}), source]
   );*/
-
+/*
   return result.rows[0];
 }
 
@@ -202,7 +202,7 @@ export async function getChatHistory(limit = 20) {
   );
 
   return result.rows;
-}
+}*/
 /*
 export async function getEmployees() {
   const db = getPool();
