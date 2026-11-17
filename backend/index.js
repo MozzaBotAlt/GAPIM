@@ -4,7 +4,6 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { createRequire } from "node:module";
 import apiRouter from "./routes/api.js";
-import chatbotRouter from "./chatbot/index.js";
 import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
 import { initializeDatabase, saveIncomingRequest } from "./database.js";
 
@@ -71,7 +70,6 @@ app.get("/", (req, res) => {
 
 // Use API router
 app.use("/api", apiRouter);
-app.use("/chatbot", chatbotRouter);
 registerInfositemrsmRoutes(app);
 
 app.post("/github/webhooks/", express.json({ type: "application/json" }), (request, response) => {
