@@ -94,7 +94,6 @@ function sanitizeJson(value) {
     return String(value);
   }
 }
-/*
 export async function initializeDatabase() {
   const db = getPool();
   if (!db) {
@@ -138,8 +137,7 @@ export async function initializeDatabase() {
   `);
 
   return true;
-}*/
-/*
+}
 export async function saveIncomingRequest(req) {
   const db = getPool();
   if (!db) {
@@ -165,14 +163,12 @@ export async function saveIncomingRequest(req) {
   );
 
   return result.rows[0];
-}*/
-/*
+}
 export async function saveChatMessage({ message, userId, metadata, response, source = "http" }) {
   const db = getPool();
   if (!db) {
     return null;
   }
-  /*
   const result = await db.query(
     `
       INSERT INTO chatbot_messages (user_id, message, response, metadata, source)
@@ -180,8 +176,7 @@ export async function saveChatMessage({ message, userId, metadata, response, sou
       RETURNING id, user_id, message, response, metadata, source, created_at;
     `,
     [userId || null, message || "", response || null, sanitizeJson(metadata || {}), source]
-  );*/
-/*
+  );
   return result.rows[0];
 }
 
@@ -202,8 +197,7 @@ export async function getChatHistory(limit = 20) {
   );
 
   return result.rows;
-}*/
-/*
+}
 export async function getEmployees() {
   const db = getPool();
   if (!db) {
@@ -222,8 +216,7 @@ export async function getEmployee(id) {
 
   const result = await db.query("SELECT * FROM employees WHERE id = $1;", [id]);
   return result.rows;
-}*/
-/*
+}
 export async function addEmployee(first_name, last_name) {
   const db = getPool();
   if (!db) {
@@ -237,5 +230,4 @@ export async function addEmployee(first_name, last_name) {
   const id = result.rows[0]?.id;
   return getEmployee(id);
 }
-*/
 export default getPool;
