@@ -42,17 +42,4 @@ router.get("/dev/:id", async (req, res) => {
   console.log(`Dev Request endpoint accessed from IP: ${req.ip}`);
 });
 
-// Add employee
-router.post("/addemployee", async (req, res) => {
-  try {
-    const { first_name, last_name } = req.body;
-    const employee = await addEmployee(first_name, last_name);
-    console.log(`Employee Added`);
-    res.status(201).json({ message: "Success!", employee });
-  } catch (error) {
-    console.log(`Error:`, error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
 export default router;
