@@ -28,6 +28,13 @@ URL to API is as listed below:
 - `GET /api/dev/:id` - Returns specific employee by ID
 - `POST /api/addemployee` - Add new employee (requires `first_name` and `last_name` in body)
 
+### Chatbot text storage
+- `POST /chatbot/message` - Save a text message and its generated reply
+- `PUT /chatbot/message` - Save a text message with source `http-put`
+- `GET /chatbot/history` - Read the latest 20 saved messages
+
+Send JSON with a non-empty `message` string (maximum 10,000 characters); `userId` and `metadata` are optional. Configure `DATABASE_URL`, or `PGHOST`, `PGDATABASE`, `PGUSER`, and `PGPASSWORD`. Locally, the backend reads `backend/.env` or `backend/process.env`; on hosts, set `SECRETS_FILE` or provide environment variables directly. Set `PUBLIC_SITE_URL` to the browser frontend origin and `TRUST_PROXY_HOPS` to the number of trusted reverse proxies in production. Never commit populated secret files.
+
 ### Webhooks
 - `POST /github/webhooks/` - GitHub webhook handler for issues and ping events
 

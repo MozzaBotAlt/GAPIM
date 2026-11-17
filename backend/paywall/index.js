@@ -31,8 +31,8 @@ router.use(express.urlencoded({ extended: true })); // gateway callbacks post fo
 
 // --- Basic CORS so the static frontend on Vercel can call this backend. ---
 router.use((req, res, next) => {
-  const origin = process.env.PUBLIC_SITE_URL || "*";
-  res.header("Access-Control-Allow-Origin", origin);
+  const origin = process.env.PUBLIC_SITE_URL;
+  if (origin) res.header("Access-Control-Allow-Origin", origin);
   res.header("Access-Control-Allow-Headers", "Content-Type, x-client-id, x-user-email");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") return res.sendStatus(204);

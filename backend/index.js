@@ -2,19 +2,19 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import dotenv from "dotenv";
+import { createRequire } from "node:module";
 import apiRouter from "./routes/api.js";
 import chatbotRouter from "./chatbot/index.js";
 import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
 import { initializeDatabase, saveIncomingRequest } from "./database.js";
 
-dotenv.config({ path: "/etc/secrets/.env" });
-
 //Constants
+const require = createRequire(import.meta.url);
 const paywall = require("./paywall/index.js");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
+const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS || 1);
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -25,7 +25,7 @@ const limiter = rateLimit({
 });
 
 //App settings
-app.set("trust proxy", 20 /* number of proxies between user and server */);
+app.set("trust proxy", process.env.NODE_ENV === "production" ? trustProxyHops : false);
 app.disable("x-powered-by"); //Disabling fingerprinting
 app.use(limiter); //Apply rate limiter to all requests
 app.use(helmet()); //Apply helmet
@@ -35,12 +35,14 @@ app.use(express.urlencoded({ extended: false }));
 //CORS settings
 app.use(
   cors({
-    origin: "*",
+    origin:
+      process.env.PUBLIC_SITE_URL ||
+      (process.env.NODE_ENV === "production" ? false : "*"),
   })
 );
 
 //Request Handlers
-app.use("/api", paywall);
+app.use(paywall);
 
 app.use((req, res, next) => {
   console.log(`Client's IP: ${req.ip}`);
@@ -93,33 +95,6 @@ app.post("/github/webhooks/", express.json({ type: "application/json" }), (reque
   }
 });
 
-initializeDatabase()
-  .then((ready) => {
-    if (ready) {
-      console.info("Database tables are ready.");
-    }
-  })
-  .catch((error) => {
-    console.warn("Database initialization failed:", error.message);
-  });
-
-//Port listen
-app.listen(PORT, () => {
-  console.info(`Server is running on ${baseurl || `http://localhost:${PORT}`}`);
-});
-
-// error handling
-app.use((req, res) => {
-  console.warn(`404 Not Found: ${req.originalUrl}`);
-  res.status(404).redirect(`${baseurl || `http://localhost:${PORT}`}`);
-});
-
-app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
-  if (res.headersSent) return next(err);
-  res.status(500).redirect(`${baseurl || `http://localhost:${PORT}`}`);
-});
-
 //Similar endpoint redirect
 app.get("/date", (req, res) => {
   res.redirect(`${baseurl || `http://localhost:${PORT}`}/api/date`);
@@ -127,4 +102,25 @@ app.get("/date", (req, res) => {
 
 app.get("/dev", (req, res) => {
   res.redirect(`${baseurl || `http://localhost:${PORT}`}/api/dev`);
+});
+
+app.use((req, res) => {
+  console.warn(`404 Not Found: ${req.originalUrl}`);
+  res.status(404).json({ error: "not_found" });
+});
+
+app.use((error, req, res, next) => {
+  console.error("Unhandled request error:", error.message);
+  if (res.headersSent) return next(error);
+  res.status(500).json({ error: "internal_server_error" });
+});
+
+const databaseReady = await initializeDatabase();
+if (!databaseReady) {
+  throw new Error("Database initialization did not complete; refusing to start.");
+}
+console.info("Database tables are ready.");
+
+app.listen(PORT, () => {
+  console.info(`Server is running on ${baseurl || `http://localhost:${PORT}`}`);
 });

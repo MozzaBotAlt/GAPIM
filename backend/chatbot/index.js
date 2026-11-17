@@ -30,13 +30,20 @@ router.get("/history", async (req, res) => {
     const history = await getChatHistory(20);
     res.json({ success: true, history });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Chat history lookup failed:", error.message);
+    res.status(500).json({ success: false, error: "internal_server_error" });
   }
 });
 
 router.post("/message", async (req, res) => {
   try {
     const { message, userId, metadata } = req.body || {};
+    if (typeof message !== "string" || !message.trim()) {
+      return res.status(400).json({ success: false, error: "message_required" });
+    }
+    if (message.length > 10000) {
+      return res.status(413).json({ success: false, error: "message_too_long" });
+    }
     const responseText = buildResponse(message);
 
     const saved = await saveChatMessage({
@@ -49,13 +56,20 @@ router.post("/message", async (req, res) => {
 
     res.json({ success: true, reply: responseText, saved });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Chat message save failed:", error.message);
+    res.status(500).json({ success: false, error: "internal_server_error" });
   }
 });
 
 router.put("/message", async (req, res) => {
   try {
     const { message, userId, metadata } = req.body || {};
+    if (typeof message !== "string" || !message.trim()) {
+      return res.status(400).json({ success: false, error: "message_required" });
+    }
+    if (message.length > 10000) {
+      return res.status(413).json({ success: false, error: "message_too_long" });
+    }
     const responseText = buildResponse(message);
 
     const saved = await saveChatMessage({
@@ -68,7 +82,8 @@ router.put("/message", async (req, res) => {
 
     res.json({ success: true, reply: responseText, saved });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Chat message save failed:", error.message);
+    res.status(500).json({ success: false, error: "internal_server_error" });
   }
 });
 

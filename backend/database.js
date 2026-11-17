@@ -1,19 +1,19 @@
-import express from "express";
-import postgres from "postgres";
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 
-dotenv.config({ path: "/etc/secrets/.env" });
-
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
-
-const conn = postgres({
-  host: PGHOST,
-  database: PGDATABASE,
-  username: PGUSER,
-  password: PGPASSWORD,
-  port: 5432,
-  ssl: "require",
+const hostedSecretsFile = "/etc/secrets/.env";
+const standardSecretsFile = fileURLToPath(new URL("./.env", import.meta.url));
+const localSecretsFile = fileURLToPath(new URL("./process.env", import.meta.url));
+dotenv.config({
+  path:
+    process.env.SECRETS_FILE ||
+    (existsSync(hostedSecretsFile)
+      ? hostedSecretsFile
+      : existsSync(standardSecretsFile)
+        ? standardSecretsFile
+        : localSecretsFile),
 });
 
 let pool = null;
@@ -27,22 +27,38 @@ function getPool() {
     process.env.DATABASE_URL ||
     process.env.NEON_DATABASE_URL ||
     process.env.PG_CONNECTION_STRING;
+  const hasPostgresConfig =
+    process.env.PGHOST &&
+    process.env.PGDATABASE &&
+    process.env.PGUSER &&
+    process.env.PGPASSWORD;
 
-  if (!connectionString) {
+  if (!connectionString && !hasPostgresConfig) {
     console.warn(
-      "Neon database connection string is not configured. Set DATABASE_URL or NEON_DATABASE_URL."
+      "Database is not configured. Set DATABASE_URL or PGHOST, PGDATABASE, PGUSER, and PGPASSWORD."
     );
     return null;
   }
 
   try {
+    const host = process.env.PGHOST || "";
     const sslConfig =
-      connectionString.includes("neon.tech") || process.env.NODE_ENV === "production"
-        ? { rejectUnauthorized: false }
+      (connectionString || host).includes("neon.tech") ||
+      process.env.PGSSLMODE === "require" ||
+      process.env.NODE_ENV === "production"
+        ? { rejectUnauthorized: true }
         : false;
 
     pool = new Pool({
-      connectionString,
+      ...(connectionString
+        ? { connectionString }
+        : {
+            host,
+            database: process.env.PGDATABASE,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            port: Number(process.env.PGPORT || 5432),
+          }),
       ssl: sslConfig,
       max: 5,
     });
@@ -78,7 +94,7 @@ function sanitizeJson(value) {
     return String(value);
   }
 }
-
+/*
 export async function initializeDatabase() {
   const db = getPool();
   if (!db) {
@@ -122,8 +138,8 @@ export async function initializeDatabase() {
   `);
 
   return true;
-}
-
+}*/
+/*
 export async function saveIncomingRequest(req) {
   const db = getPool();
   if (!db) {
@@ -149,14 +165,14 @@ export async function saveIncomingRequest(req) {
   );
 
   return result.rows[0];
-}
+}*/
 
 export async function saveChatMessage({ message, userId, metadata, response, source = "http" }) {
   const db = getPool();
   if (!db) {
     return null;
   }
-
+  /*
   const result = await db.query(
     `
       INSERT INTO chatbot_messages (user_id, message, response, metadata, source)
@@ -164,7 +180,7 @@ export async function saveChatMessage({ message, userId, metadata, response, sou
       RETURNING id, user_id, message, response, metadata, source, created_at;
     `,
     [userId || null, message || "", response || null, sanitizeJson(metadata || {}), source]
-  );
+  );*/
 
   return result.rows[0];
 }
@@ -187,7 +203,7 @@ export async function getChatHistory(limit = 20) {
 
   return result.rows;
 }
-
+/*
 export async function getEmployees() {
   const db = getPool();
   if (!db) {
@@ -206,8 +222,8 @@ export async function getEmployee(id) {
 
   const result = await db.query("SELECT * FROM employees WHERE id = $1;", [id]);
   return result.rows;
-}
-
+}*/
+/*
 export async function addEmployee(first_name, last_name) {
   const db = getPool();
   if (!db) {
@@ -221,7 +237,5 @@ export async function addEmployee(first_name, last_name) {
   const id = result.rows[0]?.id;
   return getEmployee(id);
 }
-
+*/
 export default getPool;
-
-const users = await conn`SELECT * FROM users`;
