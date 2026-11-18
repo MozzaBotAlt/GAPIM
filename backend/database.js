@@ -119,6 +119,20 @@ function getInfositeSettings() {
   return JSON.parse(readFileSync(infositeSettingsFile, "utf8"));
 }
 
+function getJsonColumnValue(data, key) {
+  if (
+    data === null ||
+    typeof data !== "object" ||
+    Array.isArray(data) ||
+    !Object.hasOwn(data, key) ||
+    data[key] === undefined
+  ) {
+    return null;
+  }
+
+  return JSON.stringify(data[key]);
+}
+
 export async function initializeDatabase() {
   const db = getPool();
   if (!db) {
@@ -169,13 +183,36 @@ export async function initializeDatabase() {
     );
   `);
 
+  await db.query(`
+    ALTER TABLE json_documents
+      ADD COLUMN IF NOT EXISTS slides JSONB,
+      ADD COLUMN IF NOT EXISTS announcements JSONB,
+      ADD COLUMN IF NOT EXISTS settings JSONB;
+  `);
+
+  await db.query(`
+    UPDATE json_documents
+    SET
+      slides = COALESCE(slides, data->'slides'),
+      announcements = COALESCE(announcements, data->'announcements'),
+      settings = COALESCE(settings, data->'settings')
+    WHERE slides IS NULL OR announcements IS NULL OR settings IS NULL;
+  `);
+
+  const initialInfositeSettings = getInfositeSettings();
   await db.query(
     `
-      INSERT INTO json_documents (document_key, data)
-      VALUES ($1, $2::jsonb)
+      INSERT INTO json_documents (document_key, data, slides, announcements, settings)
+      VALUES ($1, $2::jsonb, $3::jsonb, $4::jsonb, $5::jsonb)
       ON CONFLICT (document_key) DO NOTHING;
     `,
-    ["infositemrsm", JSON.stringify(getInfositeSettings())]
+    [
+      "infositemrsm",
+      JSON.stringify(initialInfositeSettings),
+      getJsonColumnValue(initialInfositeSettings, "slides"),
+      getJsonColumnValue(initialInfositeSettings, "announcements"),
+      getJsonColumnValue(initialInfositeSettings, "settings"),
+    ]
   );
 
   return true;
@@ -201,13 +238,26 @@ export async function saveJsonData(documentKey, data) {
 
   const result = await db.query(
     `
-      INSERT INTO json_documents (document_key, data, updated_at)
-      VALUES ($1, $2::jsonb, NOW())
+      INSERT INTO json_documents (
+        document_key, data, slides, announcements, settings, updated_at
+      )
+      VALUES ($1, $2::jsonb, $3::jsonb, $4::jsonb, $5::jsonb, NOW())
       ON CONFLICT (document_key)
-      DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+      DO UPDATE SET
+        data = EXCLUDED.data,
+        slides = EXCLUDED.slides,
+        announcements = EXCLUDED.announcements,
+        settings = EXCLUDED.settings,
+        updated_at = NOW()
       RETURNING document_key, data, updated_at;
     `,
-    [documentKey.trim(), serializedData]
+    [
+      documentKey.trim(),
+      serializedData,
+      getJsonColumnValue(data, "slides"),
+      getJsonColumnValue(data, "announcements"),
+      getJsonColumnValue(data, "settings"),
+    ]
   );
 
   return result.rows[0];

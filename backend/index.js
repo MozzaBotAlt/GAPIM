@@ -80,11 +80,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   headers: '*',
 }));
-app.use((req, res) => {
-res.setHeader('Access-Control-Allow-Methods', '*');
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Headers', '*');
-});
 
 //Request Handlers
 //app.use(paywall);

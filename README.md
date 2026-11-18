@@ -36,7 +36,7 @@ Send JSON with a non-empty `message` string (maximum 10,000 characters); `userId
 - `POST /infositemrsm` - Push a new settings JSON document
 - `PUT /infositemrsm` - Replace the saved settings JSON document
 
-The backend stores the whole request body as PostgreSQL `JSONB` in the `json_documents` table. On first startup, the `infositemrsm` document is initialized from `settings/n.json` when that file is present. If it is absent, the default is one blank slide (with template `1` and duration `5`), empty announcements, and `settings.slidingText` set to an empty string. `settings/m.json` lists the available slide template IDs.
+The `json_documents` table stores `slides`, `announcements`, and `settings` in separate PostgreSQL `JSONB` columns. It also retains the full request body in `data` so the existing API response format remains unchanged. On startup, existing documents are backfilled into the separate columns, and the `infositemrsm` document is initialized from `settings/n.json` when that file is present. If it is absent, the default is one blank slide (with template `1` and duration `5`), empty announcements, and `settings.slidingText` set to an empty string. `settings/m.json` lists the available slide template IDs.
 
 Example:
 
