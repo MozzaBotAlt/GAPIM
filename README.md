@@ -29,7 +29,7 @@ URL to API is as listed below:
 - `POST /api/addemployee` - Add new employee (requires `first_name` and `last_name` in body)
 
 ### Hmm
-Send JSON with a non-empty `message` string (maximum 10,000 characters); `userId` and `metadata` are optional. Configure `DATABASE_URL`, or `PGHOST`, `PGDATABASE`, `PGUSER`, and `PGPASSWORD`. Locally, the backend reads `backend/.env` or `backend/process.env`; on hosts, set `SECRETS_FILE` or provide environment variables directly. Set `PUBLIC_SITE_URL` to the browser frontend origin and `TRUST_PROXY_HOPS` to the number of trusted reverse proxies in production. Never commit populated secret files.
+Send JSON with a non-empty `message` string (maximum 10,000 characters); `userId` and `metadata` are optional. Configure `DATABASE_URL`, or `PGHOST`, `PGDATABASE`, `PGUSER`, and `PGPASSWORD`. Locally, the backend reads `backend/.env` or `backend/process.env`; on hosts, set `SECRETS_FILE` or provide environment variables directly. Set `PUBLIC_SITE_URL` to the exact browser frontend origin (scheme and hostname, without a path); multiple origins can be comma-separated. Production requests from other origins are blocked. Set `TRUST_PROXY_HOPS` to the number of trusted reverse proxies in production. Never commit populated secret files.
 
 ### JSON settings storage
 - `GET /infositemrsm` - Pull the saved settings JSON document

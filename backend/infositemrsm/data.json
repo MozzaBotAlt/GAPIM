@@ -1,16 +1,1 @@
-{
-  "slides": [
-    {
-      "title": "Test slide",
-      "message": "Hello"
-    }
-  ],
-  "announcements": [
-    {
-      "title": "Test announcement"
-    }
-  ],
-  "settings": {
-    "accentColor": "#123456"
-  }
-}
+{"slides":[{"title":"Yes","caption":"yes","message":"yes","duration":5,"imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS66bSv6irxOP2DHaSFuxGNSrr6qvYYpEq8ZBtQbO-MXPbH0Gcwh5kkmCAO&s=10","template":1,"videoUrl":""}],"settings":{"slidingText":"yes"},"announcements":[]}

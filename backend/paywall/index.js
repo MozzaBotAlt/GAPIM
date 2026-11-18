@@ -29,16 +29,6 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true })); // gateway callbacks post form data
 
-// --- Basic CORS so the static frontend on Vercel can call this backend. ---
-router.use((req, res, next) => {
-  const origin = process.env.PUBLIC_SITE_URL;
-  if (origin) res.header("Access-Control-Allow-Origin", origin);
-  res.header("Access-Control-Allow-Headers", "Content-Type, x-client-id, x-user-email");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  if (req.method === "OPTIONS") return res.sendStatus(204);
-  next();
-});
-
 // List packages for the payment page.
 router.get("/api/plans", (_req, res) => {
   res.json({ plans: Object.values(PLANS), freeRunLimit: FREE_RUN_LIMIT });

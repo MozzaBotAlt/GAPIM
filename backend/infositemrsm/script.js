@@ -1,11 +1,9 @@
 import express from "express";
-import cors from "cors";
 import { getJsonData, saveJsonData } from "../database.js";
 
 const router = express.Router();
 const documentKey = "infositemrsm";
 
-router.use(cors());
 router.use(express.json());
 
 router.get("/infositemrsm", async (req, res, next) => {

@@ -14,6 +14,10 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const baseurl = process.env.APP_URL;
 const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS || 1);
+const publicSiteOrigins = (process.env.PUBLIC_SITE_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minutes
@@ -34,9 +38,11 @@ app.use(express.urlencoded({ extended: false }));
 //CORS settings
 app.use(
   cors({
-    origin:
-      process.env.PUBLIC_SITE_URL ||
-      (process.env.NODE_ENV === "production" ? false : "*"),
+    origin: publicSiteOrigins.length
+      ? publicSiteOrigins
+      : process.env.NODE_ENV === "production"
+        ? false
+        : "*",
   })
 );
 
