@@ -41,19 +41,19 @@ app.use(express.urlencoded({ extended: false }));
     origin: publicSiteOrigins.length
       ? publicSiteOrigins
       : process.env.NODE_ENV === "production"
-        ? false
+        ? true
         : "*",
   })
 );
 */
 //cors v2
-const corsOptions = {
+/*const corsOptions = {
   origin: (origin, callback) => {
     // 1. Allow requests with no origin (like Postman, curl, or mobile apps)
     if (!origin) return callback(null, true);
 
     // 2. Check against your allowlist if defined
-    if (publicSiteOrigins.length > 0) {
+    /*if (publicSiteOrigins.length > 0) {
       if (publicSiteOrigins.includes(origin)) {
         return callback(null, true);
       }
@@ -72,7 +72,18 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Step 2: Explicit preflight methods
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"], // Step 2: Explicit preflight headers
   optionsSuccessStatus: 204, // Step 2: Clean preflight status for all browsers
-};
+};*/
+
+//cors v3
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  headers: '*',
+}));
+
+res.setHeader('Access-Control-Allow-Methods', '*');
+res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Headers', '*');
 
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // Step 2: Ensure preflight OPTIONS passes before auth routes
