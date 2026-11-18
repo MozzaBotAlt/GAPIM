@@ -1,0 +1,20 @@
+[
+  { "template": 1, "name": "Bottom left", "position": "bottom-left" },
+  { "template": 2, "name": "Top left", "position": "top-left" },
+  { "template": 3, "name": "Bottom right", "position": "bottom-right" },
+  { "template": 4, "name": "Top right", "position": "top-right" },
+  { "template": 5, "name": "Center left", "position": "center-left" },
+  { "template": 6, "name": "Center right", "position": "center-right" },
+  { "template": 7, "name": "Upper left", "position": "upper-left" },
+  { "template": 8, "name": "Upper right", "position": "upper-right" },
+  {
+    "template": 9,
+    "name": "Raised bottom right",
+    "position": "raised-bottom-right"
+  },
+  {
+    "template": 10,
+    "name": "Full-width footer",
+    "position": "full-width-footer"
+  }
+]

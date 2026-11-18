@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import { Pool } from "pg";
@@ -6,6 +6,22 @@ import { Pool } from "pg";
 const hostedSecretsFile = "/etc/secrets/.env";
 const standardSecretsFile = fileURLToPath(new URL("./.env", import.meta.url));
 const localSecretsFile = fileURLToPath(new URL("./process.env", import.meta.url));
+const infositeSettingsFile = fileURLToPath(new URL("../settings/n.json", import.meta.url));
+const defaultInfositeSettings = {
+  slides: [
+    {
+      title: "",
+      message: "",
+      imageUrl: "",
+      videoUrl: "",
+      duration: 5,
+      caption: "",
+      template: 1,
+    },
+  ],
+  announcements: [],
+  settings: { slidingText: "" },
+};
 dotenv.config({
   path:
     process.env.SECRETS_FILE ||
@@ -94,6 +110,15 @@ function sanitizeJson(value) {
     return String(value);
   }
 }
+
+function getInfositeSettings() {
+  if (!existsSync(infositeSettingsFile)) {
+    return defaultInfositeSettings;
+  }
+
+  return JSON.parse(readFileSync(infositeSettingsFile, "utf8"));
+}
+
 export async function initializeDatabase() {
   const db = getPool();
   if (!db) {
@@ -136,8 +161,76 @@ export async function initializeDatabase() {
     );
   `);
 
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS json_documents (
+      document_key TEXT PRIMARY KEY,
+      data JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await db.query(
+    `
+      INSERT INTO json_documents (document_key, data)
+      VALUES ($1, $2::jsonb)
+      ON CONFLICT (document_key) DO NOTHING;
+    `,
+    ["infositemrsm", JSON.stringify(getInfositeSettings())]
+  );
+
   return true;
 }
+
+export async function saveJsonData(documentKey, data) {
+  if (typeof documentKey !== "string" || documentKey.trim() === "") {
+    throw new TypeError("documentKey must be a non-empty string");
+  }
+  if (data === undefined) {
+    throw new TypeError("data must be JSON-serializable");
+  }
+
+  const serializedData = JSON.stringify(data);
+  if (serializedData === undefined) {
+    throw new TypeError("data must be JSON-serializable");
+  }
+
+  const db = getPool();
+  if (!db) {
+    throw new Error("Database connection unavailable");
+  }
+
+  const result = await db.query(
+    `
+      INSERT INTO json_documents (document_key, data, updated_at)
+      VALUES ($1, $2::jsonb, NOW())
+      ON CONFLICT (document_key)
+      DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+      RETURNING document_key, data, updated_at;
+    `,
+    [documentKey.trim(), serializedData]
+  );
+
+  return result.rows[0];
+}
+
+export async function getJsonData(documentKey) {
+  if (typeof documentKey !== "string" || documentKey.trim() === "") {
+    throw new TypeError("documentKey must be a non-empty string");
+  }
+
+  const db = getPool();
+  if (!db) {
+    throw new Error("Database connection unavailable");
+  }
+
+  const result = await db.query(
+    "SELECT document_key, data, updated_at FROM json_documents WHERE document_key = $1;",
+    [documentKey.trim()]
+  );
+
+  return result.rows[0] || null;
+}
+
 export async function saveIncomingRequest(req) {
   const db = getPool();
   if (!db) {

@@ -35,6 +35,25 @@ URL to API is as listed below:
 
 Send JSON with a non-empty `message` string (maximum 10,000 characters); `userId` and `metadata` are optional. Configure `DATABASE_URL`, or `PGHOST`, `PGDATABASE`, `PGUSER`, and `PGPASSWORD`. Locally, the backend reads `backend/.env` or `backend/process.env`; on hosts, set `SECRETS_FILE` or provide environment variables directly. Set `PUBLIC_SITE_URL` to the browser frontend origin and `TRUST_PROXY_HOPS` to the number of trusted reverse proxies in production. Never commit populated secret files.
 
+### JSON settings storage
+- `GET /infositemrsm` - Pull the saved settings JSON document
+- `POST /infositemrsm` - Push a new settings JSON document
+- `PUT /infositemrsm` - Replace the saved settings JSON document
+
+The backend stores the whole request body as PostgreSQL `JSONB` in the `json_documents` table. On first startup, the `infositemrsm` document is initialized from `settings/n.json` when that file is present. If it is absent, the default is one blank slide (with template `1` and duration `5`), empty announcements, and `settings.slidingText` set to an empty string. `settings/m.json` lists the available slide template IDs.
+
+Example:
+
+```bash
+curl -X PUT http://localhost:8080/infositemrsm \
+  -H "Content-Type: application/json" \
+  -d '{"slides":[{"title":"Welcome","message":"Hello","duration":5,"template":1}],"announcements":[],"settings":{"slidingText":"Welcome!"}}'
+
+curl http://localhost:8080/infositemrsm
+```
+
+`POST` returns `201 Created`; `PUT` replaces the same document and returns `200 OK`. Both methods accept a JSON request body, and `GET` returns the stored JSON directly. The existing database connection settings above are required.
+
 ### Webhooks
 - `POST /github/webhooks/` - GitHub webhook handler for issues and ping events
 

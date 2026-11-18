@@ -1,55 +1,59 @@
 import express from "express";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import cors from "cors";
+import { getJsonData, saveJsonData } from "../database.js";
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dataFile = path.resolve(__dirname, "data.json");
+const documentKey = "infositemrsm";
 
 router.use(cors());
 router.use(express.json());
 
-function readBackendData() {
+router.get("/infositemrsm", async (req, res, next) => {
   try {
-    const raw = fs.readFileSync(dataFile, "utf-8");
-    return JSON.parse(raw);
+    const storedDocument = await getJsonData(documentKey);
+    if (!storedDocument) {
+      return res.status(404).json({ message: "No settings document found" });
+    }
+
+    res.json(storedDocument.data);
   } catch (error) {
-    return { slides: [], announcements: [], settings: {} };
+    next(error);
   }
-}
-
-function writeBackendData(data) {
-  fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), "utf-8");
-}
-
-router.get("/infositemrsm", (req, res) => {
-  const data = readBackendData();
-  res.json(data);
 });
 
-router.post("/infositemrsm", (req, res) => {
+router.post("/infositemrsm", async (req, res, next) => {
   if (req.body === undefined) {
     return res.status(400).json({ message: "No data provided" });
   }
 
-  const payload = req.body;
-  writeBackendData(payload);
-
-  res.status(201).json({ success: true, message: "Data saved", data: payload });
+  try {
+    const savedDocument = await saveJsonData(documentKey, req.body);
+    res.status(201).json({
+      success: true,
+      message: "Data saved",
+      data: savedDocument.data,
+      updatedAt: savedDocument.updated_at,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put("/infositemrsm", (req, res) => {
+router.put("/infositemrsm", async (req, res, next) => {
   if (req.body === undefined) {
     return res.status(400).json({ message: "No data provided" });
   }
 
-  const payload = req.body;
-  writeBackendData(payload);
-
-  res.json({ success: true, data: payload });
+  try {
+    const savedDocument = await saveJsonData(documentKey, req.body);
+    res.json({
+      success: true,
+      data: savedDocument.data,
+      updatedAt: savedDocument.updated_at,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export function registerInfositemrsmRoutes(app) {
@@ -57,4 +61,4 @@ export function registerInfositemrsmRoutes(app) {
   app.use("/api", router);
 }
 
-export { readBackendData, writeBackendData, router };
+export { router };
