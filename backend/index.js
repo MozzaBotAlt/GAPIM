@@ -125,6 +125,6 @@ if (!databaseReady) {
 }
 console.info("Database tables are ready.");
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.info(`Server is running on ${baseurl || `http://localhost:${PORT}`}`);
 });
