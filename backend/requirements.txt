@@ -1,9 +1,0 @@
-postgres
-express
-dotenv
-cors
-express-rate-limit
-helmet
-path
-fs
-l
