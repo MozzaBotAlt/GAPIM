@@ -86,10 +86,6 @@ res.setHeader('Access-Control-Allow-Origin', '*');
 res.setHeader('Access-Control-Allow-Headers', '*');
 });
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Step 2: Ensure preflight OPTIONS passes before auth routes
-
-
 //Request Handlers
 //app.use(paywall);
 
