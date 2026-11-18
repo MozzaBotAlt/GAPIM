@@ -36,7 +36,7 @@ app.use(express.json()); //Parse JSON bodies
 app.use(express.urlencoded({ extended: false }));
 
 //CORS settings
-app.use(
+/*app.use(
   cors({
     origin: publicSiteOrigins.length
       ? publicSiteOrigins
@@ -45,9 +45,41 @@ app.use(
         : "*",
   })
 );
+*/
+//cors v2
+const corsOptions = {
+  origin: (origin, callback) => {
+    // 1. Allow requests with no origin (like Postman, curl, or mobile apps)
+    if (!origin) return callback(null, true);
+
+    // 2. Check against your allowlist if defined
+    if (publicSiteOrigins.length > 0) {
+      if (publicSiteOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    }
+
+    // 3. In development, reflect the exact requesting origin instead of '*'
+    if (process.env.NODE_ENV !== "production") {
+      return callback(null, true);
+    }
+
+    // 4. Block everything in production if publicSiteOrigins is empty
+    return callback(null, false);
+  },
+  credentials: true, // Step 1: Allows cookies & Authorization headers
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Step 2: Explicit preflight methods
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"], // Step 2: Explicit preflight headers
+  optionsSuccessStatus: 204, // Step 2: Clean preflight status for all browsers
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Step 2: Ensure preflight OPTIONS passes before auth routes
+
 
 //Request Handlers
-app.use(paywall);
+//app.use(paywall);
 
 app.use((req, res, next) => {
   console.log(`Client's IP: ${req.ip}`);
