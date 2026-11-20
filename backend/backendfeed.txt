@@ -1,0 +1,13 @@
+{
+  "slides": [],
+  "announcements": [],
+  "events": [],
+  "slidingText": "",
+  "newsText": "",
+  "settings": {
+    "slidingText": "",
+    "footerNews": "",
+    "tickerDuration": "24",
+    "timetableUrl": ""
+  }
+}

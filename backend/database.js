@@ -6,21 +6,19 @@ import { Pool } from "pg";
 const hostedSecretsFile = "/etc/secrets/.env";
 const standardSecretsFile = fileURLToPath(new URL("./.env", import.meta.url));
 const localSecretsFile = fileURLToPath(new URL("./process.env", import.meta.url));
-const infositeSettingsFile = fileURLToPath(new URL("../settings/n.json", import.meta.url));
+const infositeSettingsFile = fileURLToPath(new URL("./backendfeed.txt", import.meta.url));
 const defaultInfositeSettings = {
-  slides: [
-    {
-      title: "",
-      message: "",
-      imageUrl: "",
-      videoUrl: "",
-      duration: 5,
-      caption: "",
-      template: 1,
-    },
-  ],
+  slides: [],
   announcements: [],
-  settings: { slidingText: "" },
+  events: [],
+  slidingText: "",
+  newsText: "",
+  settings: {
+    slidingText: "",
+    footerNews: "",
+    tickerDuration: "24",
+    timetableUrl: "",
+  },
 };
 dotenv.config({
   path:
@@ -116,7 +114,16 @@ function getInfositeSettings() {
     return defaultInfositeSettings;
   }
 
-  return JSON.parse(readFileSync(infositeSettingsFile, "utf8"));
+  try {
+    const parsedSettings = JSON.parse(readFileSync(infositeSettingsFile, "utf8"));
+    if (parsedSettings === null || typeof parsedSettings !== "object" || Array.isArray(parsedSettings)) {
+      return defaultInfositeSettings;
+    }
+    return parsedSettings;
+  } catch (error) {
+    console.warn("Could not read infosite settings feed:", error.message);
+    return defaultInfositeSettings;
+  }
 }
 
 function getJsonColumnValue(data, key) {
