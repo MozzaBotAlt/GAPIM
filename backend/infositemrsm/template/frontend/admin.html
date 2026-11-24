@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College Display Admin</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow"><span data-college-name>Your College</span> DISPLAY</p>
+          <h1>Display control</h1>
+          <p class="lead">
+            Manage the playlist, picture announcements, moving text, and timetable
+            embed.
+          </p>
+        </div>
+        <a class="button button-secondary" href="index.html">Open display</a>
+      </header>
+      <p id="admin-status" class="admin-status" role="status" aria-live="polite"></p>
+      <section class="admin-grid">
+        <div class="admin-card">
+          <p class="eyebrow">VIDEO PLAYLIST</p>
+          <h2>Add a video</h2>
+          <form id="slide-form">
+            <label
+              >Title<input
+                id="slide-title"
+                type="text"
+                placeholder="College update" /></label
+            ><label
+              >Description<textarea
+                id="slide-message"
+                rows="3"
+                placeholder="Short description"
+              ></textarea></label
+            ><label
+              >Video URL<input
+                id="slide-video"
+                type="url"
+                required
+                placeholder="https://www.youtube.com/watch?v=..." /></label
+            ><label
+              >Play for at least (seconds)<input
+                id="slide-duration"
+                type="number"
+                min="5"
+                value="30"
+            /></label>
+            <div class="button-row">
+              <button class="button button-primary" type="submit">
+                Save video</button
+              ><button
+                class="button button-secondary"
+                type="button"
+                id="clear-btn"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="admin-card">
+          <p class="eyebrow">PICTURE ANNOUNCEMENTS</p>
+          <h2>Add an announcement</h2>
+          <form id="announcement-form">
+            <label
+              >Section<select id="announcement-section">
+                <option value="primary">Primary</option>
+                <option value="secondary">Secondary</option>
+              </select></label
+            ><label
+              >Title<input
+                id="announcement-title"
+                type="text"
+                required
+                placeholder="Announcement title" /></label
+            ><label
+              >Short message (optional)<textarea
+                id="announcement-message"
+                rows="2"
+                placeholder="Add a short detail for the display card"
+              ></textarea></label
+            ><label
+              >Picture URL<input
+                id="announcement-image"
+                type="url"
+                required
+                placeholder="https://example.com/poster.jpg" /></label
+            ><label
+              >Show for (seconds)<input
+                id="announcement-duration"
+                type="number"
+                min="4"
+                value="4"
+            /></label>
+            <div class="button-row">
+              <button class="button button-primary" type="submit">
+                Save announcement</button
+              ><button
+                class="button button-secondary"
+                type="button"
+                id="clear-announcement-btn"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="admin-card admin-wide">
+          <p class="eyebrow">DISPLAY SETTINGS</p>
+          <h2>Moving Texts and timetable</h2>
+          <form id="settings-form" class="settings-grid">
+            <label class="wide-field"
+              >Ticker announcements<textarea
+                id="footer-news"
+                rows="3"
+                placeholder="First announcement | Second announcement"
+              ></textarea></label
+            ><label
+              >Scroll speed (seconds)<input
+                id="ticker-duration"
+                type="number"
+                min="5"
+                value="24" /></label
+            ><label
+              >ASC timetable embed URL (one-day view)<input
+                id="timetable-url"
+                type="url"
+                placeholder="https://calendar.example.com/embed?view=day" /></label
+            >
+            <div class="wide-field">
+              <button class="button button-primary" type="submit">
+                Save display settings
+              </button>
+            </div>
+          </form>
+          <p class="hint">
+            Paste the public HTTPS one-day embed URL. The display keeps this timetable compact beside the larger announcement pictures. Some websites block iframe embeds.
+          </p>
+        </div>
+        <div class="admin-card admin-wide">
+          <p class="eyebrow">EVENT COUNTDOWNS</p>
+          <h2>Schedule an event</h2>
+          <form id="event-form" class="settings-grid">
+            <label
+              >Event name<input
+                id="event-title"
+                type="text"
+                required
+                placeholder="Assembly" /></label
+            ><label
+              >Date and time<input
+                id="event-starts-at"
+                type="datetime-local"
+                required /></label
+            ><label class="wide-field"
+              >Pinned picture URL (optional)<input
+                id="event-image-url"
+                type="url"
+                placeholder="https://example.com/event-picture.jpg"
+            /></label>
+            <div class="wide-field button-row">
+              <button id="event-save-button" class="button button-primary" type="submit">
+                Add event
+              </button>
+              <button id="event-cancel-button" class="button button-secondary" type="button" hidden>
+                Cancel edit
+              </button>
+            </div>
+          </form>
+          <div id="event-list" class="event-list"></div>
+        </div>
+        <div class="admin-card admin-wide">
+          <p class="eyebrow">CONTENT LIBRARY</p>
+          <h2>Saved videos</h2>
+          <div id="slide-list" class="slide-list"></div>
+          <div class="list-footer">
+            <button
+              class="button button-secondary"
+              type="button"
+              id="export-btn"
+            >
+              Export JSON</button
+            ><button
+              class="button button-secondary"
+              type="button"
+              id="import-btn"
+            >
+              Import JSON
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <footer class="brand-footer">
+      <span data-college-footer>&copy; Your College</span>
+    </footer>
+  </body>
+</html>

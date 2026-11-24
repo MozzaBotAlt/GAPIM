@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-MY">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="description" content="College information display" />
+    <title>College Display</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta http-equiv="refresh" content="3000" />
+  </head>
+  <body class="display-page">
+    <main class="display-screen" aria-label="College information display">
+      <div class="dashboard-shell">
+        <div class="display-grid">
+          <aside class="calendar-rail" aria-label="Calendar and countdown">
+            <section class="dashboard-card calendar-card">
+              <h2 class="panel-heading">Calendar</h2>
+              <ul id="calendar-events" class="calendar-events" aria-live="polite">
+                <li class="calendar-empty">No upcoming events</li>
+              </ul>
+            </section>
+            <section class="dashboard-card countdown-card">
+              <h2 class="panel-heading">Countdown</h2>
+              <div class="event-countdown" id="event-countdown" aria-live="polite">
+                <span id="event-countdown-title">NO UPCOMING EVENTS</span>
+                <time id="event-countdown-time"></time>
+              </div>
+            </section>
+          </aside>
+
+          <section class="video-panel" aria-label="Video montage">
+            <h2 class="panel-heading">
+              <span>Video</span>
+              <button id="video-audio-toggle" class="video-audio-toggle" type="button" hidden>
+                Enable audio
+              </button>
+            </h2>
+            <div id="media-stage" class="media-stage">
+              <div id="empty-state" class="display-empty-state" aria-live="polite">
+                <p class="empty-eyebrow" data-college-name>Your College</p>
+                <h1>Welcome</h1>
+                <p>Videos and updates will appear here.</p>
+              </div>
+            </div>
+          </section>
+
+          <aside class="information-panel" aria-label="Announcements">
+            <div id="announcement-cards" class="announcement-cards">
+              <article class="dashboard-announcement" data-section="primary">
+                <img alt="" hidden />
+                <div class="announcement-copy">
+                  <p class="empty-eyebrow">Primary</p>
+                  <h3>No announcement</h3>
+                  <p class="announcement-message">Updates will appear here.</p>
+                </div>
+              </article>
+              <article class="dashboard-announcement" data-section="secondary">
+                <img alt="" hidden />
+                <div class="announcement-copy">
+                  <p class="empty-eyebrow">Secondary</p>
+                  <h3>No announcement</h3>
+                  <p class="announcement-message">Updates will appear here.</p>
+                </div>
+              </article>
+            </div>
+          </aside>
+        </div>
+
+        <section class="utility-grid" aria-label="Daily information">
+          <section class="utility-card time-date-card" aria-label="Time and date">
+            <h2 class="panel-heading">Time &amp; Date</h2>
+            <time id="display-clock" aria-label="Current time">--:--</time>
+            <time id="gregorian-date">Loading date…</time>
+            <p id="hijri-date" lang="ms">Hijri date loading…</p>
+            <a class="solat-link" href="misc/prayer-times.html">Prayer Schedule</a>
+          </section>
+
+          <section class="utility-card prayer-panel" aria-label="Prayer times">
+            <h2 class="panel-heading">Prayer Times</h2>
+            <div id="prayer-times" class="prayer-times" aria-live="polite">
+              <div class="prayer-time"><span>Fajr</span><time>--:--</time></div>
+              <div class="prayer-time"><span>Sunrise</span><time>--:--</time></div>
+              <div class="prayer-time"><span>Dhuhr</span><time>--:--</time></div>
+              <div class="prayer-time"><span>Asr</span><time>--:--</time></div>
+              <div class="prayer-time"><span>Maghrib</span><time>--:--</time></div>
+              <div class="prayer-time"><span>Isha</span><time>--:--</time></div>
+            </div>
+            <p id="prayer-status" class="prayer-status" role="status">Configure the prayer feed in config.js</p>
+          </section>
+
+          <section class="utility-card timetable-card">
+            <h2 class="panel-heading">Timetable Embed</h2>
+            <div id="timetable-container" class="timetable-container">
+              <p id="timetable-placeholder">No timetable available.</p>
+              <iframe
+                id="timetable-frame"
+                title="College timetable"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                sandbox="allow-scripts allow-forms allow-popups"
+                hidden
+              ></iframe>
+            </div>
+          </section>
+        </section>
+
+        <section class="ticker-footer" aria-label="Announcements">
+          <span class="ticker-label">Updates</span>
+          <span class="ticker-arrow" aria-hidden="true">&rsaquo;</span>
+          <div id="sliding-text" class="sliding-text" aria-live="polite"></div>
+          <span class="ticker-arrow" aria-hidden="true">&lsaquo;</span>
+        </section>
+
+        <footer class="brand-footer">
+          <span data-college-footer>&copy; Your College</span>
+        </footer>
+      </div>
+    </main>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

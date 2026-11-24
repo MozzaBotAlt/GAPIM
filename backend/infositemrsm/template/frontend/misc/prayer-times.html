@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Prayer schedule for your college" />
+    <title>Prayer Schedule | Your College</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body class="solat-page">
+    <main class="solat-shell">
+      <header class="solat-header">
+        <div>
+          <p class="solat-eyebrow" data-college-name>Your College</p>
+          <h1>Prayer Schedule</h1>
+        </div>
+        <time id="solat-clock" aria-label="Current time">--:--:--</time>
+      </header>
+
+      <section class="solat-hero">
+        <div>
+          <p class="solat-eyebrow">LOCAL PRAYER TIMES</p>
+          <h2>Daily schedule</h2>
+          <p id="solat-date">Loading date…</p>
+          <p id="solat-hijri-date">Hijri date loading…</p>
+        </div>
+        <div class="next-prayer-card">
+          <span>NEXT PRAYER</span>
+          <strong id="next-prayer-name">--</strong>
+          <time id="next-prayer-countdown">--:--:--</time>
+        </div>
+      </section>
+
+      <section id="solat-event-banner" class="solat-event-banner" aria-live="polite" hidden>
+        <img id="solat-event-image" alt="" hidden />
+        <div>
+          <p class="solat-eyebrow">UPCOMING EVENT</p>
+          <h2 id="solat-event-title"></h2>
+        </div>
+      </section>
+
+      <section class="solat-times-section" aria-label="Today's prayer times">
+        <div class="solat-section-heading">
+          <div>
+            <p class="solat-eyebrow">TODAY</p>
+            <h2>Prayer times</h2>
+          </div>
+          <p id="solat-status" role="status">Configure the prayer feed in config.js</p>
+        </div>
+        <div class="solat-times-grid">
+          <div class="solat-prayer-time" data-prayer="fajr"><span>Fajr</span><time>--:--</time></div>
+          <div class="solat-prayer-time" data-prayer="dhuhr"><span>Dhuhr</span><time>--:--</time></div>
+          <div class="solat-prayer-time" data-prayer="asr"><span>Asr</span><time>--:--</time></div>
+          <div class="solat-prayer-time" data-prayer="maghrib"><span>Maghrib</span><time>--:--</time></div>
+          <div class="solat-prayer-time" data-prayer="isha"><span>Isha</span><time>--:--</time></div>
+        </div>
+      </section>
+
+      <footer class="solat-footer">
+        <p id="solat-return-notice" hidden>
+          Returning to the display in <time id="solat-return-countdown">01:00</time>
+        </p>
+      </footer>
+    </main>
+    <script src="../config.js"></script>
+    <script src="../script.js"></script>
+
+    <footer class="brand-footer">
+      <span data-college-footer>&copy; Your College</span>
+    </footer>
+  </body>
+</html>

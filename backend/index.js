@@ -18,7 +18,7 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { createRequire } from "node:module";
 import apiRouter from "./routes/api.js";
-import { registerInfositemrsmRoutes } from "./infositemrsm/script.js";
+import { registerInfositemrsmRoutes } from "./infositemrsm/lgk/script.js";
 import { initializeDatabase, saveIncomingRequest } from "./database.js";
 
 //Constants

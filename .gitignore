@@ -5,3 +5,7 @@
 ca.pem
 /backend/process.env
 /backend/secret.env
+
+# Dependencies and local template feed storage
+node_modules/
+backend/infositemrsm/template/backend/feed.json
