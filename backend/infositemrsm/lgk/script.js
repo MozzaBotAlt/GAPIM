@@ -6,7 +6,7 @@ const documentKey = "infositemrsm";
 
 router.use(express.json());
 
-router.get("/infositemrsm", async (req, res, next) => {
+router.get("/infositemrsm/lgk", async (req, res, next) => {
   try {
     const storedDocument = await getJsonData(documentKey);
     if (!storedDocument) {
@@ -19,7 +19,7 @@ router.get("/infositemrsm", async (req, res, next) => {
   }
 });
 
-router.post("/infositemrsm", async (req, res, next) => {
+router.post("/infositemrsm/lgk", async (req, res, next) => {
   if (req.body === undefined) {
     return res.status(400).json({ message: "No data provided" });
   }
@@ -37,7 +37,7 @@ router.post("/infositemrsm", async (req, res, next) => {
   }
 });
 
-router.put("/infositemrsm", async (req, res, next) => {
+router.put("/infositemrsm/lgk", async (req, res, next) => {
   if (req.body === undefined) {
     return res.status(400).json({ message: "No data provided" });
   }
